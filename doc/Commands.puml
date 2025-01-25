@@ -1,0 +1,45 @@
+@startuml
+
+class RelTime {
+    int64_t microseconds
+}
+
+class StateCommand
+
+class Job {
+    uint32_t id
+    std::variant<TxEvent, RxEvent> events[]
+}
+Job *-- TxEvent
+Job *-- RxEvent
+class TxEvent {
+    RelTime start
+    RelTime duration
+    ' What else?
+}
+class RxEvent {
+    RelTime start
+    RelTime duration
+    ' Each input taper becomes one output beam
+    Taper tapers[]
+}
+RxEvent *-- Taper
+class Taper {
+    uint32_t id
+    std::complex weights[]
+}
+
+class JobResults {
+    RxData rxData[]
+}
+JobResults *-- RxData
+class RxData {
+    Beam beams[]
+}
+RxData *-- Beam
+class Beam {
+    uint32_t id
+    uint32_t data[]
+}
+
+@enduml
